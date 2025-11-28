@@ -19,7 +19,18 @@ st.set_page_config(page_title="Incendios Coruña", layout="wide")
 st.title("🔥 Análisis de Incendios en A Coruña")
 st.write("Esta aplicación muestra la evolución temporal y la ubicación de los incendios.")
 
-df_incendios = pd.read_csv('fires-all.csv.zip', parse_dates=['fecha'], index_col='fecha')
+import zipfile
+
+# BLOQUE PARA LEER ZIP DE MAC CORRECTAMENTE
+with zipfile.ZipFile('fires-all.csv.zip') as z:
+    # Buscamos el archivo .csv real ignorando la basura de Mac (__MACOSX)
+    nombre_archivo = [f for f in z.namelist() if f.endswith('.csv') and '__MACOSX' not in f][0]
+    
+    # Abrimos ese archivo específico
+    with z.open(nombre_archivo) as f:
+        df_incendios = pd.read_csv(f, parse_dates=['fecha'], index_col='fecha')
+        
+# Filtramos por provincia (A Coruña es 15)
 df_coruna = df_incendios[df_incendios['idprovincia'] == 15]
 
 # --- SECCIÓN 2: EL MAPA (FOLIUM) ---
