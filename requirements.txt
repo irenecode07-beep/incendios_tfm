@@ -1,0 +1,10 @@
+streamlit
+pandas
+numpy
+seaborn
+scipy
+folium
+streamlit-folium
+matplotlib
+mapclassify
+openpyxl
